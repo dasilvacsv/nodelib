@@ -1,24 +1,19 @@
 const ZKLib = require('./zklib');
 const mysql = require('mysql2/promise');
+const {pool} = require('./db.js') 
 
 async function insertAttendance(userId, attTime) {
-    const dbConfig = {
-        host: 'localhost', // o tu servidor de base de datos
-        user: 'root',
-        database: 'datab',
-        password: 'gabi1212',
-    };
-
-    // Convertir attTime a formato compatible con MySQL (YYYY-MM-DD HH:MM:SS)
+    // Convert attTime to a format compatible with PostgreSQL (YYYY-MM-DD HH:MM:SS)
     const formattedAttTime = attTime.replace('T', ' ').substring(0, 19);
-
-    const connection = await mysql.createConnection(dbConfig);
-    const sql = `INSERT INTO RegistrosAsistencia (userId, attTime) VALUES (?, ?)`;
-    await connection.execute(sql, [userId, formattedAttTime]);
-    await connection.end();
-
-    console.log(`Registro de asistencia insertado: ${userId} - ${formattedAttTime}`);
-}
+  
+    const sql = `INSERT INTO "RegistrosAsistencia" ("userId", "attTime") VALUES ($1, $2)`;
+    try {
+      await pool.query(sql, [userId, formattedAttTime]);
+      console.log(`Attendance record inserted: ${userId} - ${formattedAttTime}`);
+    } catch (error) {
+      console.error('Error inserting attendance record:', error);
+    }
+  }
 
 async function monitorAttendances() {
     const zkInstance = new ZKLib('192.168.1.225', 4370, 10000, 4000);

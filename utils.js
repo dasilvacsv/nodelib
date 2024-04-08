@@ -144,7 +144,6 @@ module.exports.decodeUserData72 = (userData)=>{
 }
 
 module.exports.decodeRecordData40 = (recordData)=>{
-    console.log(recordData.toJSON());
     const record = {
         userSn: recordData.readUIntLE(0, 2),
         deviceUserId: recordData

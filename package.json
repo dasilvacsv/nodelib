@@ -26,6 +26,7 @@
   "homepage": "https://github.com/caobo171/node-zklib#readme",
   "dependencies": {
     "mysql2": "^3.9.3",
-    "node-zklib": "^1.0.0"
+    "node-zklib": "^1.0.0",
+    "pg": "^8.11.5"
   }
 }
